@@ -43,7 +43,14 @@ class MainViewController: UIViewController {
     private let scrollThreshold = 50.0
     private var beforeOffset: Double = 0
     private var afterOffset: Double = 0
-    private var pageIndex = 0
+    
+    private var pageIndex = 0 {
+        didSet {
+            onPageDidChange?(oldValue, pageIndex)
+        }
+    }
+    
+    var onPageDidChange: ((Int, Int) -> Void)?
     
     private let items = [
         Item(color: UIColor.random),
