@@ -36,6 +36,7 @@ class MainViewController: UIViewController {
         collection.backgroundColor = .clear
         collection.delegate = self
         collection.dataSource = self
+        collection.isPagingEnabled = true
         return collection
     }()
 
