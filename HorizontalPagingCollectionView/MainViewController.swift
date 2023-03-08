@@ -36,12 +36,15 @@ class MainViewController: UIViewController {
         collection.backgroundColor = .clear
         collection.delegate = self
         collection.dataSource = self
-        collection.isPagingEnabled = true
         return collection
     }()
 
     private let height: CGFloat = 250
-
+    private let scrollThreshold = 50.0
+    private var beforeOffset: Double = 0
+    private var afterOffset: Double = 0
+    private var pageIndex = 0
+    
     private let items = [
         Item(color: UIColor.random),
         Item(color: UIColor.random),
@@ -80,6 +83,42 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 280, height: height)
     }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        beforeOffset = scrollView.contentOffset.x
+    }
+    
+    func scrollViewWillEndDragging(
+        _ scrollView: UIScrollView,
+        withVelocity velocity: CGPoint,
+        targetContentOffset: UnsafeMutablePointer<CGPoint>
+    ) {
+        targetContentOffset.pointee = scrollView.contentOffset
+        afterOffset = scrollView.contentOffset.x
+        
+        let diff = afterOffset - beforeOffset
+        
+        if diff >= scrollThreshold {
+            pageIndex += 1
+            if pageIndex >= items.count {
+                pageIndex = items.count - 1
+            }
+        } else if diff <= -scrollThreshold {
+            pageIndex -= 1
+            if pageIndex < 0 {
+                pageIndex = 0
+                beforeOffset = 0
+                afterOffset = 0
+            }
+        }
+        
+        collectionView.scrollToItem(
+            at: IndexPath(item: pageIndex, section: 0),
+            at: .centeredHorizontally,
+            animated: true
+        )
+    }
+
 }
 
 
