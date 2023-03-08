@@ -20,9 +20,9 @@ class MainViewController: UIViewController {
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = .zero
+        layout.sectionInset = .init(top: 0, left: 20, bottom: 0, right: 20)
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 0
         return layout
     }()
@@ -78,7 +78,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: height)
+        return CGSize(width: 280, height: height)
     }
 }
 
